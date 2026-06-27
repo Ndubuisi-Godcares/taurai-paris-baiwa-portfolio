@@ -20,42 +20,40 @@ function TypingEffect() {
     const current = roles[roleIndex]
 
     if (isPaused) {
-      const t = setTimeout(() => {
-        setIsPaused(false)
-        setIsDeleting(true)
-      }, 2000)
+      const t = setTimeout(() => { setIsPaused(false); setIsDeleting(true) }, 2000)
       return () => clearTimeout(t)
     }
 
-    const t = setTimeout(
-      () => {
-        if (!isDeleting) {
-          if (displayText.length < current.length) {
-            setDisplayText(current.slice(0, displayText.length + 1))
-          } else {
-            setIsPaused(true)
-          }
+    const t = setTimeout(() => {
+      if (!isDeleting) {
+        if (displayText.length < current.length) {
+          setDisplayText(current.slice(0, displayText.length + 1))
         } else {
-          if (displayText.length > 0) {
-            setDisplayText(current.slice(0, displayText.length - 1))
-          } else {
-            setIsDeleting(false)
-            setRoleIndex((prev) => (prev + 1) % roles.length)
-          }
+          setIsPaused(true)
         }
-      },
-      isDeleting ? 40 : 85,
-    )
+      } else {
+        if (displayText.length > 0) {
+          setDisplayText(current.slice(0, displayText.length - 1))
+        } else {
+          setIsDeleting(false)
+          setRoleIndex((prev) => (prev + 1) % roles.length)
+        }
+      }
+    }, isDeleting ? 40 : 85)
 
     return () => clearTimeout(t)
   }, [displayText, isDeleting, isPaused, roleIndex])
 
   return (
-    <span className="text-cyan-400 font-mono">
+    <span className="text-cyan-600 dark:text-cyan-400 font-mono">
       {displayText}
-      <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 animate-blink align-middle" />
+      <span className="inline-block w-0.5 h-5 bg-cyan-600 dark:bg-cyan-400 ml-0.5 animate-blink align-middle" />
     </span>
   )
+}
+
+function scrollToAbout() {
+  document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
 }
 
 export default function Hero() {
@@ -63,60 +61,67 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
       {/* Grid background */}
       <div
-        className="absolute inset-0 opacity-[0.035]"
+        className="absolute inset-0 opacity-[0.04] dark:opacity-[0.035]"
         style={{
           backgroundImage:
-            'linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)',
+            'linear-gradient(#0891b2 1px, transparent 1px), linear-gradient(90deg, #0891b2 1px, transparent 1px)',
           backgroundSize: '60px 60px',
         }}
       />
-      {/* Ambient glow blobs */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+      {/* Ambient glows */}
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-cyan-400/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-400/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
           {/* ── Left: text ── */}
           <div className="space-y-7 order-2 lg:order-1">
             <div>
-              <p className="font-mono text-cyan-400/60 text-sm tracking-[0.2em] mb-3">
+              <p className="font-mono text-cyan-600/60 dark:text-cyan-400/60 text-sm tracking-[0.2em] mb-3">
                 // hello, world
               </p>
-              <h1 className="text-5xl sm:text-6xl font-bold text-white leading-tight">
+              <h1 className="text-5xl sm:text-6xl font-bold text-slate-900 dark:text-white leading-tight">
                 Hi, I&apos;m{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-sky-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-sky-500 dark:from-cyan-400 dark:to-sky-300">
                   Taurai
                 </span>
               </h1>
-              <h2 className="text-3xl sm:text-4xl font-semibold text-slate-300 mt-1">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-slate-600 dark:text-slate-300 mt-1">
                 Paris Baiwa
               </h2>
             </div>
 
             <div className="h-8 flex items-center">
-              <span className="text-lg sm:text-xl text-slate-300">
+              <span className="text-lg sm:text-xl text-slate-700 dark:text-slate-300">
                 <TypingEffect />
               </span>
             </div>
 
-            <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl">
+            <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl">
               Detail-oriented CS student passionate about building scalable, database-driven
               applications. Currently interning at{' '}
-              <span className="text-cyan-400 font-medium">Tata Consultancy Services</span>,
-              turning complex datasets into actionable insights.
+              <span className="text-cyan-600 dark:text-cyan-400 font-medium">
+                Tata Consultancy Services
+              </span>
+              , turning complex datasets into actionable insights.
             </p>
 
             <div className="flex flex-wrap gap-4">
               <a
                 href="#projects"
-                className="bg-cyan-400 text-[#060d1a] font-semibold px-6 py-3 rounded-lg hover:bg-cyan-300 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                className="bg-cyan-600 dark:bg-cyan-400 text-white dark:text-[#060d1a] font-semibold px-6 py-3 rounded-lg hover:bg-cyan-700 dark:hover:bg-cyan-300 transition-colors"
               >
                 View Projects
               </a>
               <a
                 href="/resume.pdf"
                 download
-                className="flex items-center gap-2 border border-cyan-400/50 text-cyan-400 font-semibold px-6 py-3 rounded-lg hover:bg-cyan-400/10 transition-colors"
+                className="flex items-center gap-2 border border-cyan-600/50 dark:border-cyan-400/50 text-cyan-600 dark:text-cyan-400 font-semibold px-6 py-3 rounded-lg hover:bg-cyan-600/10 dark:hover:bg-cyan-400/10 transition-colors"
               >
                 <Download size={16} />
                 Download Resume
@@ -129,7 +134,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="text-slate-400 hover:text-cyan-400 transition-colors"
+                className="text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
               >
                 <Linkedin size={22} />
               </a>
@@ -138,14 +143,14 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
-                className="text-slate-400 hover:text-cyan-400 transition-colors"
+                className="text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
               >
                 <Github size={22} />
               </a>
               <a
                 href="mailto:tauraiparisbaiwa@gmail.com"
                 aria-label="Email"
-                className="text-slate-400 hover:text-cyan-400 transition-colors"
+                className="text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
               >
                 <Mail size={22} />
               </a>
@@ -154,11 +159,10 @@ export default function Hero() {
 
           {/* ── Right: photo + SQL terminal ── */}
           <div className="flex flex-col items-center gap-6 order-1 lg:order-2">
-            {/* Photo */}
             <div className="relative">
-              <div className="absolute -inset-4 rounded-full border border-cyan-400/15 animate-pulse" />
-              <div className="absolute -inset-2 rounded-full border border-cyan-400/25" />
-              <div className="w-60 h-60 sm:w-72 sm:h-72 rounded-full overflow-hidden border-4 border-cyan-400/40 shadow-[0_0_50px_rgba(34,211,238,0.12)]">
+              <div className="absolute -inset-4 rounded-full border border-cyan-600/15 dark:border-cyan-400/15 animate-pulse" />
+              <div className="absolute -inset-2 rounded-full border border-cyan-600/25 dark:border-cyan-400/25" />
+              <div className="w-60 h-60 sm:w-72 sm:h-72 rounded-full overflow-hidden border-4 border-cyan-600/40 dark:border-cyan-400/40 shadow-[0_0_50px_rgba(8,145,178,0.12)] dark:shadow-[0_0_50px_rgba(34,211,238,0.12)]">
                 <Image
                   src="/images/esther.jpeg"
                   alt="Taurai Paris Baiwa"
@@ -170,7 +174,7 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* SQL terminal */}
+            {/* SQL terminal — always dark */}
             <div className="terminal-window w-full max-w-xs text-sm font-mono select-none">
               <div className="terminal-header">
                 <span className="terminal-dot bg-[#ff5f57]" />
@@ -211,11 +215,15 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-600">
+        {/* Scroll button — functional */}
+        <button
+          onClick={scrollToAbout}
+          aria-label="Scroll to About section"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors cursor-pointer"
+        >
           <span className="font-mono text-xs tracking-widest">scroll</span>
           <ChevronDown size={16} className="animate-bounce" />
-        </div>
+        </button>
       </div>
     </section>
   )

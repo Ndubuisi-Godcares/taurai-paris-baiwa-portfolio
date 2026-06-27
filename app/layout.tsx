@@ -2,13 +2,9 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import { ThemeProvider } from '@/components/ThemeProvider'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains',
@@ -41,10 +37,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased bg-[#060d1a] text-slate-200">
-        <Navbar />
-        {children}
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark`}>
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.classList.toggle('dark',t==='dark');})();`,
+          }}
+        />
+      </head>
+      <body className="font-sans antialiased bg-white dark:bg-[#060d1a] text-slate-900 dark:text-slate-200 transition-colors duration-300">
+        <ThemeProvider>
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
